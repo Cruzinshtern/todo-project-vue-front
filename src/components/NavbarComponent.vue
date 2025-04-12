@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { MenuItem } from '@/types/MenuItem.interface'
+import type { MenuItem } from '@/interfaces/MenuItem.interface'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
