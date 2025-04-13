@@ -1,31 +1,47 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import CreateTodoView from '@/views/CreateTodoView.vue'
-import EditTodoView from '@/views/EditTodoView.vue'
-import SettingsView from '@/views/SettingsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/auth',
+      name: 'auth',
+      component: () => import('@/views/AuthView.vue'),
+      redirect: '/auth/register', // ✅ редирект при заходе на /auth
+      children: [
+        {
+          path: 'register',
+          component: () => import('@/views/RegisterView.vue'),
+        },
+        {
+          path: 'login',
+          component: () => import('@/views/LoginView.vue'),
+        },
+      ],
+    },
+    {
       path: '/',
       name: 'home',
-      component: HomeView,
+      component: () => import('@/views/HomeView.vue'),
     },
     {
       path: '/create-todo',
       name: 'createTodo',
-      component: CreateTodoView,
+      component: () => import('@/views/CreateTodoView.vue'),
     },
     {
       path: '/edit-todo',
       name: 'editTodo',
-      component: EditTodoView,
+      component: () => import('@/views/EditTodoView.vue'),
     },
     {
       path: '/settings',
       name: 'settings',
-      component: SettingsView,
+      component: () => import('@/views/SettingsView.vue'),
+    },
+    {
+      path: '/:catchAll(.*)*', // 👈 правильный способ обработать все несуществующие вложенные пути
+      component: () => import('@/views/Error404View.vue'),
     },
   ],
 })
