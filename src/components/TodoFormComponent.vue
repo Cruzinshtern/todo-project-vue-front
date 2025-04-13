@@ -2,6 +2,8 @@
 import type { Todo } from '@/interfaces/Todo.inteface'
 import type { CreatedTodoType } from '@/types/CreatedTodo.type'
 import { defineProps, reactive, defineEmits } from 'vue'
+import TodoInput from './shared/TodoInput.vue'
+import TodoButton from './shared/TodoButton.vue'
 
 const props = defineProps({
   title: String,
@@ -17,38 +19,37 @@ const form = reactive<Todo>({
 
 const handleSubmit = () => {
   emit('createdTodo', form)
+  resetForm()
+}
+
+const resetForm = () => {
+  form.title = ''
+  form.description = ''
 }
 </script>
 <template>
   <form @submit.prevent="handleSubmit" class="flex flex-col gap-3 items-center">
     <h3 class="text-xl">{{ props.title }}</h3>
     <div class="w-full flex">
-      <label for="title" class="w-1/8">Title</label>
-      <input
-        v-model="form.title"
-        type="text"
-        id="title"
-        class="border rounded w-full py-2 px-3 mb-2"
-        placeholder="Enter title"
+      <label class="w-1/8">Title</label>
+      <TodoInput
+        :field-type="'input'"
+        :input-type="'text'"
+        :placeholder="'Enter title'"
+        v-model:value="form.title"
       />
     </div>
     <div class="w-full flex">
-      <label for="description" class="w-1/8">Description</label>
-      <textarea
-        v-model="form.description"
-        id="description"
-        class="border rounded w-full py-2 px-3"
-        rows="4"
-        placeholder="Enter description"
-      ></textarea>
+      <label class="w-1/8">Description</label>
+      <TodoInput
+        :field-type="'textarea'"
+        :placeholder="'Enter description'"
+        v-model:value="form.description"
+      />
     </div>
-    <div>
-      <button
-        class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
-        type="submit"
-      >
-        Add Job
-      </button>
+    <div class="w-full flex justify-end gap-4">
+      <TodoButton :type="'submit'" :text="'Add Todo'" :role="'success'" />
+      <TodoButton :type="'reset'" :text="'Cancel'" :role="'cancel'" @reset="resetForm" />
     </div>
   </form>
 </template>
