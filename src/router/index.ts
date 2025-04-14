@@ -1,3 +1,4 @@
+import { LocalStorageService } from '@/services/LocalStorageService'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -45,6 +46,23 @@ const router = createRouter({
       component: () => import('@/views/Error404View.vue'),
     },
   ],
+})
+
+const isAuthenticated = () => !!LocalStorageService.getToken()
+
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/auth', '/auth/login', '/auth/register']
+  const authRequired = !publicPages.includes(to.path)
+
+  if (authRequired && !isAuthenticated()) {
+    return next('/auth/login')
+  }
+
+  if ((to.path === '/auth' || publicPages.includes(to.path)) && isAuthenticated()) {
+    return next('/')
+  }
+
+  next()
 })
 
 export default router
