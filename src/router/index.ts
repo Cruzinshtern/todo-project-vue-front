@@ -7,7 +7,8 @@ const router = createRouter({
       path: '/auth',
       name: 'auth',
       component: () => import('@/views/AuthView.vue'),
-      redirect: '/auth/register', // ✅ редирект при заходе на /auth
+      meta: { hideNavbar: true },
+      redirect: '/auth/register',
       children: [
         {
           path: 'register',
@@ -40,7 +41,7 @@ const router = createRouter({
       component: () => import('@/views/SettingsView.vue'),
     },
     {
-      path: '/:catchAll(.*)*', // 👈 правильный способ обработать все несуществующие вложенные пути
+      path: '/:catchAll(.*)*',
       component: () => import('@/views/Error404View.vue'),
     },
   ],
