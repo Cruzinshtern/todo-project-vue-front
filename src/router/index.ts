@@ -37,6 +37,11 @@ const router = createRouter({
       component: () => import('@/views/EditTodoView.vue'),
     },
     {
+      path: '/list',
+      name: 'list',
+      component: () => import('@/views/TodoListView.vue'),
+    },
+    {
       path: '/settings',
       name: 'settings',
       component: () => import('@/views/SettingsView.vue'),

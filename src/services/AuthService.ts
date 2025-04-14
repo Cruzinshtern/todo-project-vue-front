@@ -1,15 +1,14 @@
 import type { UserAuth } from '@/interfaces/UserAuth.interface'
 import type { UserRegister } from '@/interfaces/UserRegister.interface'
-import axios from 'axios'
+import publicApi from './publicApi'
 
 export const AuthService = {
   async register(data: UserRegister) {
-    const response = await axios.post('/api/users/create', data)
-    return response.data
+    await publicApi.post('/users/create', data)
   },
 
   async login(data: UserAuth) {
-    const response = await axios.post('/api/auth/login', data)
+    const response = await publicApi.post('/auth/login', data)
     return response.data
   },
 }
