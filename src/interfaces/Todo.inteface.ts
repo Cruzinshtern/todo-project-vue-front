@@ -1,3 +1,5 @@
+import type { TodoStatus } from '@/types/TodoStatus.type'
+
 export interface BasicTodo {
   title: string
   description: string
@@ -5,7 +7,7 @@ export interface BasicTodo {
 }
 export interface Todo extends BasicTodo {
   _id: string
-  status: 1 | 2 | 3
+  status: TodoStatus
   isFavorite: boolean
   created_at: string
   created_by: string

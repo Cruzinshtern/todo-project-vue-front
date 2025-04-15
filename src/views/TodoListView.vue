@@ -7,6 +7,8 @@ import { onMounted, ref } from 'vue'
 const todos = ref<Todo[]>([])
 const isLoading = ref(true)
 
+const handleDeleteTodo = (id: string) => console.log('id', id)
+
 onMounted(async () => {
   try {
     const response = await TodoService.getAllTodos()
@@ -20,6 +22,12 @@ onMounted(async () => {
 </script>
 <template>
   <div class="flex gap-4 p-3">
-    <TodoCardComponent v-for="todo in todos" :key="todo._id" :todo="todo" class="p-2" />
+    <TodoCardComponent
+      v-for="todo in todos"
+      :key="todo._id"
+      :todo="todo"
+      class="p-2"
+      @delete="handleDeleteTodo"
+    />
   </div>
 </template>

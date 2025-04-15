@@ -11,4 +11,9 @@ export const TodoService = {
     const response = await api.post('/tasks/create', todo)
     return response.data
   },
+
+  async deleteTodo(id: string) {
+    //TODO: add delete method into the api
+    console.log('id', id)
+  },
 }
