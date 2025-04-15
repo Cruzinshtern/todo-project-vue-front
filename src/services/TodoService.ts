@@ -23,7 +23,7 @@ export const TodoService = {
   },
 
   async deleteTodo(id: string) {
-    //TODO: add delete method into the api
-    console.log('id', id)
+    const response = await api.delete(`/tasks/${id}`)
+    return response.data
   },
 }
