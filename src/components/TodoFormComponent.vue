@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Todo } from '@/interfaces/Todo.inteface'
+import type { BasicTodo } from '@/interfaces/Todo.inteface'
 import type { CreatedTodoType } from '@/types/CreatedTodo.type'
 import { defineProps, reactive, defineEmits } from 'vue'
 import TodoInput from './shared/TodoInput.vue'
@@ -11,10 +11,10 @@ const props = defineProps({
 
 const emit = defineEmits<CreatedTodoType>()
 
-const form = reactive<Todo>({
+const form = reactive<BasicTodo>({
   title: '',
   description: '',
-  isComplete: false,
+  start_at: '',
 })
 
 const handleSubmit = () => {

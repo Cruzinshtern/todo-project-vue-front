@@ -1,9 +1,15 @@
 <script lang="ts" setup>
 import TodoFormComponent from '@/components/TodoFormComponent.vue'
-import type { Todo } from '@/interfaces/Todo.inteface'
+import type { BasicTodo } from '@/interfaces/Todo.inteface'
+import { TodoService } from '@/services/TodoService'
 
-const handleCreateTodo = (form: Todo) => {
-  console.log('form', form)
+const handleCreateTodo = async (form: BasicTodo) => {
+  try {
+    const todo = await TodoService.createTodo(form)
+    console.log('todo', todo)
+  } catch (e) {
+    console.log('e', e)
+  }
 }
 </script>
 <template>

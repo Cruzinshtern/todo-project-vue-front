@@ -1,5 +1,5 @@
-import type { Todo } from '@/interfaces/Todo.inteface'
+import type { BasicTodo } from '@/interfaces/Todo.inteface'
 
 export type CreatedTodoType = {
-  (event: 'createdTodo', value: Todo): void
+  (event: 'createdTodo', value: BasicTodo): void
 }

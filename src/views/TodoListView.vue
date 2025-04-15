@@ -1,16 +1,25 @@
 <script lang="ts" setup>
+import TodoCardComponent from '@/components/TodoCardComponent.vue'
+import type { Todo } from '@/interfaces/Todo.inteface'
 import { TodoService } from '@/services/TodoService'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+
+const todos = ref<Todo[]>([])
+const isLoading = ref(true)
 
 onMounted(async () => {
   try {
-    const todos = await TodoService.getAllTodos()
-    console.log('todos', todos)
+    const response = await TodoService.getAllTodos()
+    todos.value = response.data
   } catch (e) {
     console.log('e', e)
+  } finally {
+    isLoading.value = true
   }
 })
 </script>
 <template>
-  <div>Todo List</div>
+  <div class="flex gap-4 p-3">
+    <TodoCardComponent v-for="todo in todos" :key="todo._id" :todo="todo" class="p-2" />
+  </div>
 </template>
