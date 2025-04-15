@@ -40,18 +40,16 @@ const resetForm = () => {
 <template>
   <form @submit.prevent="handleSubmit" class="flex flex-col gap-3 items-center">
     <h3 class="text-xl">{{ props.title }}</h3>
-    <div class="w-full flex">
+    <div class="w-full flex" v-if="props.formType === 'register'">
       <TodoInput
-        v-if="props.formType === 'register'"
         :field-type="'input'"
         :input-type="'text'"
         :placeholder="'Enter first name'"
         v-model:value="(form as UserRegister).firstName"
       />
     </div>
-    <div class="w-full flex">
+    <div class="w-full flex" v-if="props.formType === 'register'">
       <TodoInput
-        v-if="props.formType === 'register'"
         :field-type="'input'"
         :input-type="'text'"
         :placeholder="'Enter last name'"

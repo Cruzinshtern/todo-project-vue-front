@@ -19,15 +19,7 @@ const handleValueChange = (e: Event) => {
 
 <template>
   <input
-    v-if="fieldType === 'input' && inputType === 'text'"
-    class="border rounded w-full py-2 px-3 mb-2"
-    :type="props.inputType"
-    :value="props.value"
-    :placeholder="props.placeholder"
-    @input="handleValueChange"
-  />
-  <input
-    v-if="fieldType === 'input' && inputType === 'date'"
+    v-if="fieldType === 'input'"
     class="border rounded w-full py-2 px-3 mb-2"
     :type="props.inputType"
     :value="props.value"
