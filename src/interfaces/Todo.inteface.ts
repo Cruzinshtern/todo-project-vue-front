@@ -6,9 +6,9 @@ export interface BasicTodo {
   start_at: string
 }
 export interface Todo extends BasicTodo {
-  _id: string
-  status: TodoStatus
-  isFavorite: boolean
+  _id?: string
+  status?: TodoStatus
+  isFavorite?: boolean
   created_at: string
-  created_by: string
+  created_by?: string
 }

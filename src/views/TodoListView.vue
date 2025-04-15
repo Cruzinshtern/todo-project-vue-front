@@ -3,11 +3,14 @@ import TodoCardComponent from '@/components/TodoCardComponent.vue'
 import type { Todo } from '@/interfaces/Todo.inteface'
 import { TodoService } from '@/services/TodoService'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const todos = ref<Todo[]>([])
 const isLoading = ref(true)
+const router = useRouter()
 
 const handleDeleteTodo = (id: string) => console.log('id', id)
+const handleEditTodo = (id: string) => router.push(`/edit-todo/${id}`)
 
 onMounted(async () => {
   try {
@@ -28,6 +31,7 @@ onMounted(async () => {
       :todo="todo"
       class="p-2"
       @delete="handleDeleteTodo"
+      @edit="handleEditTodo"
     />
   </div>
 </template>

@@ -13,7 +13,7 @@ const handleCreateTodo = async (form: BasicTodo) => {
 }
 </script>
 <template>
-  <section class="w-1/2">
-    <TodoFormComponent title="Create Todo" @created-todo="handleCreateTodo" />
-  </section>
+  <div class="h-screen flex justify-center items-center">
+    <TodoFormComponent class="w-1/2" title="Create Todo" @created-todo="handleCreateTodo" />
+  </div>
 </template>
