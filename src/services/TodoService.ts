@@ -12,6 +12,11 @@ export const TodoService = {
     return response.data
   },
 
+  async getFavorites(): Promise<Todo[]> {
+    const response = await api.get('/tasks/favorites')
+    return response.data
+  },
+
   async createTodo(todo: BasicTodo) {
     const response = await api.post('/tasks/create', todo)
     return response.data
@@ -19,6 +24,11 @@ export const TodoService = {
 
   async updateTodo(todo: Todo) {
     const response = await api.put(`/tasks/${todo._id}`, todo)
+    return response.data
+  },
+
+  async updateTodoStatus(id: string, isFavorite: boolean) {
+    const response = await api.patch(`/tasks/favorite/${id}`, { isFavorite })
     return response.data
   },
 

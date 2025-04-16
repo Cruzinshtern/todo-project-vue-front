@@ -20,6 +20,7 @@ const form = reactive<Todo>({
   description: '',
   start_at: '',
   created_at: '',
+  isFavorite: props.todo?.isFavorite || false,
 })
 
 const handleSubmit = () => {

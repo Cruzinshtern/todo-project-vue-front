@@ -8,7 +8,8 @@ const menuItems = ref<MenuItem[]>([
   { id: 1, title: 'Home', isSelected: true, path: '/' },
   { id: 2, title: 'Create', isSelected: false, path: '/create-todo' },
   { id: 3, title: 'List', isSelected: false, path: '/list' },
-  { id: 4, title: 'Settings', isSelected: false, path: '/settings' },
+  { id: 4, title: 'Favorites', isSelected: false, path: '/favorites' },
+  { id: 5, title: 'Settings', isSelected: false, path: '/settings' },
 ])
 
 function select(item: MenuItem) {

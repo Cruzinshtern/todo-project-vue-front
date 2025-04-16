@@ -25,8 +25,7 @@ const handleEditTodo = (id: string) => router.push(`/edit-todo/${id}`)
 const handleUpdateFavStatus = async (data: { id: string; isFavorite: boolean }) => {
   try {
     await TodoService.updateTodoStatus(data.id, data.isFavorite)
-    const idx = todos.value.findIndex((todo: Todo) => todo._id === data.id)
-    todos.value[idx].isFavorite = data.isFavorite
+    todos.value = todos.value.filter((todo: Todo) => todo._id !== data.id)
     if (data.isFavorite) {
       toast.success('Todo has been added to favorites')
     } else {
@@ -40,8 +39,10 @@ const handleUpdateFavStatus = async (data: { id: string; isFavorite: boolean }) 
 const loadTodos = async () => {
   isLoading.value = true
   try {
-    const response = await TodoService.getAllTodos()
-    todos.value = response.data
+    const response = await TodoService.getFavorites()
+    console.log('response', response)
+
+    todos.value = response
   } catch (e) {
     console.log('e', e)
   } finally {
