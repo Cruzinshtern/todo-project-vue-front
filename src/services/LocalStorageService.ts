@@ -5,7 +5,7 @@ export const LocalStorageService = {
     localStorage.setItem(environment.tokenKey, token)
   },
 
-  getToken() {
+  getToken(): string | null {
     return localStorage.getItem(environment.tokenKey)
   },
 
