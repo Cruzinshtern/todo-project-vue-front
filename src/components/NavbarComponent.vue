@@ -5,7 +5,7 @@ import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const menuItems = ref<MenuItem[]>([
-  { id: 1, title: 'Home', isSelected: true, path: '/' },
+  { id: 1, title: 'Home', isSelected: true, path: '/home' },
   { id: 2, title: 'Create', isSelected: false, path: '/create-todo' },
   { id: 3, title: 'List', isSelected: false, path: '/list' },
   { id: 4, title: 'Favorites', isSelected: false, path: '/favorites' },
@@ -30,7 +30,7 @@ watch(
   (newPath) => {
     menuItems.value.forEach((item) => {
       item.isSelected = false
-      if (newPath === item.path) item.isSelected = true
+      if (newPath.includes(item.path)) item.isSelected = true
     })
   },
 )
