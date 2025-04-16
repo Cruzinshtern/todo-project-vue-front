@@ -30,14 +30,14 @@ const handleStatusChange = () => {
         class="btn border flex justify-center items-center cursor-pointer hover:text-white hover:bg-orange-500"
         @click="handleStatusChange"
       >
-        <i class="pi pi-bookmark"></i>
+        <i class="pi pi-heart"></i>
       </div>
       <div
         v-if="todo.isFavorite"
         class="btn border flex justify-center items-center cursor-pointer text-white bg-orange-500"
         @click="handleStatusChange"
       >
-        <i class="pi pi-bookmark"></i>
+        <i class="pi pi-heart"></i>
       </div>
       <div
         class="btn border flex justify-center items-center cursor-pointer hover:text-white hover:bg-green-500"
