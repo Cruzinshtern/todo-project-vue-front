@@ -3,8 +3,13 @@ import api from './api'
 import type { TodoResponse } from '@/interfaces/TodoResponse.interface'
 
 export const TodoService = {
-  async getAllTodos(): Promise<TodoResponse> {
-    const response = await api.get('/tasks')
+  async getAllTodos(page: number, limit: number): Promise<TodoResponse> {
+    const response = await api.get('/tasks', {
+      params: {
+        page,
+        limit,
+      },
+    })
     return response.data
   },
 
