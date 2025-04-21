@@ -3,7 +3,7 @@ import TodoCardComponent from '@/components/TodoCardComponent.vue'
 import TodoTableComponent from '@/components/TodoTableComponent.vue'
 import TodoPaginatorComponent from '@/components/TodoPaginatorComponent.vue'
 import type { ViewTab } from '@/interfaces/ViewTab.interface'
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { useTodoStore } from '@/stores/todoStore'
@@ -28,6 +28,18 @@ const toast = useToast()
 const todoStore = useTodoStore()
 const { todos, totalTodos } = storeToRefs(todoStore)
 
+const loadTodos = async (page: number, itemsPerPage: number) => {
+  isLoading.value = true
+  try {
+    await todoStore.loadTodos(page, itemsPerPage)
+    currentPage.value = page
+  } catch (e) {
+    toast.error(`Error while loading todos ${e}`)
+  } finally {
+    isLoading.value = false
+  }
+}
+
 const setTab = (query: string) => {
   tabs.forEach((tab: ViewTab) => {
     tab.isSelected = false
@@ -41,11 +53,11 @@ const setTab = (query: string) => {
 watch(
   () => route.query.tab,
   (newTab) => {
-    console.log('newTab', newTab)
     if (!newTab) {
       router.replace({ query: { tab: 'tiles' } })
     } else {
       setTab(newTab as string)
+      loadTodos(1, defaultItemsPerPage)
     }
   },
   { immediate: true },
@@ -60,6 +72,7 @@ const handleDeleteTodo = async (id: string) => {
     toast.error(`Failed to delete todo: ${e}`)
   }
 }
+
 const handleEditTodo = (id: string) => router.push(`/edit-todo/${id}`)
 
 const handleUpdateFavStatus = async (data: { id: string; isFavorite: boolean }) => {
@@ -81,19 +94,6 @@ const handleChangeItemsPerPage = (itemsCount: number) => {
   currentPage.value = 1
   loadTodos(1, itemsCount)
 }
-
-const loadTodos = async (page: number, itemsPerPage: number) => {
-  isLoading.value = true
-  try {
-    await todoStore.loadTodos(page, itemsPerPage)
-  } catch (e) {
-    toast.error(`Error while loading todos ${e}`)
-  } finally {
-    isLoading.value = false
-  }
-}
-
-onMounted(loadTodos)
 </script>
 
 <template>
@@ -126,7 +126,7 @@ onMounted(loadTodos)
       @update-fav-status="handleUpdateFavStatus"
     />
   </div>
-  <div class="flex flex-col gap-4 p-3" v-if="activeTab?.query === 'table'">
+  <div class="p-3" v-if="activeTab?.query === 'table'">
     <TodoTableComponent
       v-if="!isLoading"
       class="w-full"
@@ -135,15 +135,15 @@ onMounted(loadTodos)
       @edit="handleEditTodo"
       @update-fav-status="handleUpdateFavStatus"
     />
-    <TodoPaginatorComponent
-      :items-per-page-default="defaultItemsPerPage"
-      :items-per-page-selector="itemsPerPageSelector"
-      :total-todos="totalTodos"
-      :current-page="currentPage"
-      @change-page="handlePageChange"
-      @change-items-per-page="handleChangeItemsPerPage"
-    />
   </div>
+  <TodoPaginatorComponent
+    :items-per-page-default="defaultItemsPerPage"
+    :items-per-page-selector="itemsPerPageSelector"
+    :total-todos="totalTodos"
+    :current-page="currentPage"
+    @change-page="handlePageChange"
+    @change-items-per-page="handleChangeItemsPerPage"
+  />
   <div v-if="isLoading" class="flex justify-center items-center">
     <p>Loading...</p>
   </div>
