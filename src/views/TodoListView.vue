@@ -2,12 +2,12 @@
 import TodoCardComponent from '@/components/TodoCardComponent.vue'
 import TodoTableComponent from '@/components/TodoTableComponent.vue'
 import TodoPaginatorComponent from '@/components/TodoPaginatorComponent.vue'
-import type { Todo } from '@/interfaces/Todo.inteface'
 import type { ViewTab } from '@/interfaces/ViewTab.interface'
-import { TodoService } from '@/services/TodoService'
 import { onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
+import { useTodoStore } from '@/stores/todoStore'
+import { storeToRefs } from 'pinia'
 
 const tabs: ViewTab[] = [
   { id: 1, title: 'Tiles', isSelected: true, query: 'tiles' },
@@ -16,16 +16,16 @@ const tabs: ViewTab[] = [
 
 const defaultItemsPerPage: number = 5
 const itemsPerPageSelector = [5, 10, 15]
-
-const todos = ref<Todo[]>([])
 const isLoading = ref(true)
 const itemsPerPage = ref<number>(defaultItemsPerPage)
 const activeTab = ref<ViewTab>()
-const totalTodos = ref<number>(0)
 
 const router = useRouter()
 const route = useRoute()
 const toast = useToast()
+
+const todoStore = useTodoStore()
+const { todos, totalTodos } = storeToRefs(todoStore)
 
 const setTab = (query: string) => {
   tabs.forEach((tab: ViewTab) => {
@@ -52,25 +52,18 @@ watch(
 
 const handleDeleteTodo = async (id: string) => {
   try {
-    await TodoService.deleteTodo(id)
-    toast.success('Todo has been succesfully deleted')
-    await loadTodos(1, itemsPerPage.value)
+    await todoStore.deleteTodo(id, 1, itemsPerPage.value)
+    toast.success('Todo has been successfully deleted')
   } catch (e: any) {
-    toast.error(`Error deleteing the todo: ${e}`)
+    toast.error(`Failed to delete todo: ${e}`)
   }
 }
 const handleEditTodo = (id: string) => router.push(`/edit-todo/${id}`)
 
 const handleUpdateFavStatus = async (data: { id: string; isFavorite: boolean }) => {
   try {
-    await TodoService.updateTodoStatus(data.id, data.isFavorite)
-    const idx = todos.value.findIndex((todo: Todo) => todo._id === data.id)
-    todos.value[idx].isFavorite = data.isFavorite
-    if (data.isFavorite) {
-      toast.success('Todo has been added to favorites')
-    } else {
-      toast.success('Todo has been removed from favorites')
-    }
+    await todoStore.updateTodoStatus(data.id, data.isFavorite)
+    toast.success(`Todo has been ${data.isFavorite ? 'added to' : 'removed from'} favorites`)
   } catch (e: any) {
     toast.error(`Unable to add to favorites: ${e}`)
   }
@@ -85,14 +78,12 @@ const handleChangeItemsPerPage = (itemsCount: number) => {
   loadTodos(1, itemsCount)
 }
 
-const loadTodos = async (page: number = 1, limit: number = 5) => {
+const loadTodos = async (page: number, itemsPerPage: number) => {
   isLoading.value = true
   try {
-    const { data, count } = await TodoService.getAllTodos(page, limit)
-    todos.value = data
-    totalTodos.value = count
+    await todoStore.loadTodos(page, itemsPerPage)
   } catch (e) {
-    console.log('e', e)
+    toast.error(`Error while loading todos ${e}`)
   } finally {
     isLoading.value = false
   }

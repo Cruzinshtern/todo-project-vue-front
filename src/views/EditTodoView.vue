@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import type { Todo } from '@/interfaces/Todo.inteface'
-import { TodoService } from '@/services/TodoService'
 import { defineProps, onMounted, ref } from 'vue'
 import TodoFormComponent from '@/components/TodoFormComponent.vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
+import { useTodoStore } from '@/stores/todoStore'
 
 const router = useRouter()
 const toast = useToast()
+const todoStore = useTodoStore()
 
 const props = defineProps<{ id: string }>()
 
@@ -16,7 +17,7 @@ const isLoading = ref(true)
 
 onMounted(async () => {
   try {
-    todo.value = await TodoService.getOneTodo(props.id)
+    todo.value = await todoStore.getOneTodo(props.id)
   } catch (e) {
     console.error('Error loading todo:', e)
   } finally {
@@ -26,7 +27,7 @@ onMounted(async () => {
 
 const handleEditTodo = async (todo: Todo) => {
   try {
-    await TodoService.updateTodo(todo)
+    await todoStore.updateTodo(todo)
     toast.success('Todo has been edited successfully')
     router.push('/list')
   } catch (e) {
