@@ -48,7 +48,7 @@ onMounted(() => {
 
 <template>
   <div class="p-6 bg-green-500 text-white text-xl flex justify-between">
-    <span>Welcome, {{ userStore.name }}</span>
+    <span>{{ $t('welcome') }}, {{ userStore.name }}</span>
 
     <div class="flex gap-4">
       <nav>

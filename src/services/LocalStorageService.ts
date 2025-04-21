@@ -12,4 +12,12 @@ export const LocalStorageService = {
   deleteToken() {
     localStorage.removeItem(environment.tokenKey)
   },
+
+  getLanguage(): string {
+    return localStorage.getItem(environment.langKey) || environment.defaultLang
+  },
+
+  setLanguage(lang: string) {
+    localStorage.setItem(environment.langKey, lang)
+  },
 }

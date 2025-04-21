@@ -2,15 +2,16 @@
 import type { ViewTab } from '@/interfaces/ViewTab.interface'
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 
 const activeTab = ref<ViewTab>()
 const router = useRouter()
 const route = useRoute()
 
 const tabs: ViewTab[] = [
-  { id: 1, title: 'Personal Infornation', isSelected: true, query: 'personal' },
-  { id: 2, title: 'Language', isSelected: true, query: 'language' },
-  { id: 3, title: 'Theme', isSelected: false, query: 'theme' },
+  { id: 1, title: 'personalInfo', isSelected: true, query: 'personal' },
+  { id: 2, title: 'language', isSelected: true, query: 'language' },
+  { id: 3, title: 'theme', isSelected: false, query: 'theme' },
 ]
 
 const setTab = (query: string) => {
@@ -52,11 +53,16 @@ watch(
         @click="setTab(tab.query)"
       >
         <span>
-          {{ tab.title }}
+          {{ $t(tab.title) }}
         </span>
       </RouterLink>
     </div>
-    <div class="flex-1 p-4">View</div>
+    <div class="flex-1 p-4">
+      <div>
+        <div>{{ $t('selectLanguage') }}</div>
+        <LanguageSwitcher />
+      </div>
+    </div>
   </div>
 </template>
 
