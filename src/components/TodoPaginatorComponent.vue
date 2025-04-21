@@ -4,9 +4,9 @@ const props = defineProps<{
   totalTodos: number
   itemsPerPageDefault: number
   itemsPerPageSelector: number[]
+  currentPage: number
 }>()
 
-const currentPage = ref<number>(1)
 const itemsPerPage = ref<number>(props.itemsPerPageDefault)
 const totalPages = computed(() => Math.ceil(props.totalTodos / itemsPerPage.value))
 const pages = computed(() => Array.from({ length: totalPages.value }, (_, i) => i + 1))
@@ -17,16 +17,13 @@ const emit = defineEmits<{
 }>()
 
 const goToPage = (page: number) => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page
-    emit('changePage', page)
-  }
+  if (page === props.currentPage) return
+  if (page >= 1 && page <= totalPages.value) emit('changePage', page)
 }
 
 const itemsPerPageChange = (e: Event) => {
   emit('changeItemsPerPage', Number((e.target as HTMLSelectElement).value))
   itemsPerPage.value = Number((e.target as HTMLSelectElement).value)
-  currentPage.value = 1
 }
 </script>
 
@@ -53,7 +50,7 @@ const itemsPerPageChange = (e: Event) => {
       @click="goToPage(page)"
       :class="[
         'h-[30px] w-[30px] px-2 py-1 rounded flex justify-center items-center',
-        currentPage === page ? 'bg-green-500 text-white' : 'bg-white',
+        currentPage === page ? 'bg-green-500 text-white' : 'bg-white cursor-pointer',
       ]"
     >
       {{ page }}

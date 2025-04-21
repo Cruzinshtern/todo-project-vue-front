@@ -19,6 +19,7 @@ const itemsPerPageSelector = [5, 10, 15]
 const isLoading = ref(true)
 const itemsPerPage = ref<number>(defaultItemsPerPage)
 const activeTab = ref<ViewTab>()
+const currentPage = ref<number>(1)
 
 const router = useRouter()
 const route = useRoute()
@@ -52,7 +53,8 @@ watch(
 
 const handleDeleteTodo = async (id: string) => {
   try {
-    await todoStore.deleteTodo(id, 1, itemsPerPage.value)
+    currentPage.value = 1
+    await todoStore.deleteTodo(id, currentPage.value, itemsPerPage.value)
     toast.success('Todo has been successfully deleted')
   } catch (e: any) {
     toast.error(`Failed to delete todo: ${e}`)
@@ -70,11 +72,13 @@ const handleUpdateFavStatus = async (data: { id: string; isFavorite: boolean }) 
 }
 
 const handlePageChange = (page: number) => {
+  currentPage.value = page
   loadTodos(page, itemsPerPage.value)
 }
 
 const handleChangeItemsPerPage = (itemsCount: number) => {
   itemsPerPage.value = itemsCount
+  currentPage.value = 1
   loadTodos(1, itemsCount)
 }
 
@@ -135,6 +139,7 @@ onMounted(loadTodos)
       :items-per-page-default="defaultItemsPerPage"
       :items-per-page-selector="itemsPerPageSelector"
       :total-todos="totalTodos"
+      :current-page="currentPage"
       @change-page="handlePageChange"
       @change-items-per-page="handleChangeItemsPerPage"
     />
